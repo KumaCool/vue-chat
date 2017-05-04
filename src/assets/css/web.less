@@ -1,0 +1,44 @@
+html,body{height: 100%;}
+#app,.Footer{width: 100%;}
+@media screen and (min-width: 1024px) {
+  html,body,#app,.Footer{
+    .Center-Box;
+    width: 500px;
+  }
+}
+*{
+	margin: 0;
+	padding: 0;
+}
+ul,li,span,img{
+	border: 0;
+	list-style:none;
+}
+.Color{
+	color: #FFF;
+	background-color: #45A3FF;
+}
+
+// 浮动
+.Float-L{float: left;}
+.Float-R{float: right;}
+.Line li,.Line dt{.Float-L;}
+.Line .Float-R,.Line .Float-R{.Float-R;}
+
+// 居中
+.Center-Box{margin: 0 auto;}
+.Center-Text{text-align: center;}
+
+// 控件
+.Icon-Msg{
+  @size: 25px;
+  width: @size;
+  height: @size;
+  line-height: @size;
+  border-radius: 50%;
+	background-color: red;
+  color: #FFF;
+}
+.Botton{
+  padding: 5px;
+}
