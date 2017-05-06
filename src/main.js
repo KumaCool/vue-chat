@@ -14,13 +14,6 @@ const store = new Vuex.Store({
     title: '入口页面', // 页面标题
     socket: io('http://localhost:3000') // 建立socket连接
   },
-  getters: {
-    set_cookie: function (state, name, value) {
-      let time = new Date()
-      time.setTime(time.getTime() + 30 * 24 * 60 * 1000)
-      document.cookie = name + '=' + escape(value) + 'expires=' + time.toGMTString()
-    }
-  },
   mutations: {
     set_state: function (state, obj) {
       for (var k in obj) {

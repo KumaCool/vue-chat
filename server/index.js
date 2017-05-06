@@ -56,14 +56,6 @@ io.on('connection', function (socket) {
 					} else msg = re_act_norm(0, err);
 					socket.emit('reAct', msg);
 				});
-				// userModel.find(allData).exec((err,query) => {
-				// 	console.log(query);
-				// 	if (!err && !isNull(query)) {
-				// 		userModel.update({_id: query._id}, {$set: {token: query.token}})
-				// 		msg = re_act_norm(1, query.token);
-				// 	}
-				// 	socket.emit('reAct', msg);
-				// })
 				break;
 		}
 	});
