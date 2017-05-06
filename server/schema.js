@@ -3,6 +3,7 @@ module.exports = {
 		user: String,
 		password: String,
 		email: String,
+		token:String,
 		date: Date
 	},
 	friend: {

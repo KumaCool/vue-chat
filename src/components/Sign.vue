@@ -5,7 +5,7 @@
         <li>帐号 <input type="text" name="user" v-model="form.user"></li>
         <li>密码 <input type="password" name="password" v-model="form.password"></li>
       </ul>
-      <ul v-if="title == '用户注册'">
+      <ul v-if="!title">
         <li>确认密码 <input type="password" name="password"></li>
         <li>邮箱 <input type="text" name="email" v-model="form.email"></li>
         <li>
@@ -37,10 +37,10 @@ export default{
   },
   methods: {
     change: function () {
-      let temp;
+      var temp
       temp = this.title ? '用户注册' : '用户登录'
+      this.title = !this.title
       this.$store.commit('set_state', {title: temp})
-      // return this.title
     },
     submit: function () {
       let obj = {
@@ -49,7 +49,19 @@ export default{
       }
       obj = {
         data: JSON.stringify(obj),
-        callback: r => console.log(r)
+        callback: r => {
+          if (r.code === 1) {
+            var temp = {
+              name: 'user',
+              value: 'user:' + this.form.user + ',token:' + r.info
+            }
+            this.$store.commit('set_cookie', temp)
+            // 跳转
+          } else if (this.title) {
+            console.log('用户名或密码错误!')
+          } else console.log('该用户已被占用!')
+          console.log(r)
+        }
       }
       this.$store.commit('socket_action', obj)
     }

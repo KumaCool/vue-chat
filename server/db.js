@@ -20,7 +20,7 @@ function set_model (obj) {
 // 初始化模型
 set_model(schema);
 
-module.exports = {
+let api = module.exports = {
 	/**
 	 * 获取集合模型
 	 * @param  {String} name 集合名
@@ -39,7 +39,6 @@ module.exports = {
 	}
 }
 // console.log('---------staring-----------');
-
 
 // db.connection.on('error', function (error) {
 // 	console.log(error);

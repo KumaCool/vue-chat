@@ -32,6 +32,11 @@ const store = new Vuex.Store({
       state.socket.on('reAct', function (r) {
         obj.callback(r)
       })
+    },
+    set_cookie: function (state, obj) {
+      let time = new Date()
+      time.setTime(time.getTime() + 30 * 24 * 60 * 1000)
+      document.cookie = obj.name + '=' + escape(obj.value) + 'expires=' + time.toGMTString()
     }
   }
 })

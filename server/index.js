@@ -20,41 +20,52 @@ io.on('connection', function (socket) {
 	variable.online++;
 	socket.on('disconnect', () => variable.online--);
 
-	// 用户动作
+	/**
+	 * 接收用户动作接口
+	 * @param  {String} obj.type 执行类型
+	 * @param {Object} obj.data 具体数据
+	 * @return {Function} msg = re_act_norm()
+	 */
 	socket.on('action', function (obj) {
 		obj = JSON.parse(obj);
 		let allData = obj.data,
 			msg = re_act_norm(0);
-		/**
-		 * 接收数据接口
-		 * @param  {String} obj.type 执行类型
-		 * @param {Object} obj.data 具体数据
-		 * @return {Function} re_act_norm()
-		 */
+
 		switch (obj.type) {
 			case 'signUp':
-				var	userModel = db.get_model('user');
+				var userModel = db.get_model('user');
 				allData.password = encrypt(allData.password);
 				if (isNull(allData.user)) break;
 				userModel.find({user: allData.user}).exec((err,query) => {
 					if (!err && isNull(query)) {
+						allData.token = encrypt(allData.user,1);
 						userModel.create(allData);
-						msg = re_act_norm(1, '注册成功!');
-					} else msg = re_act_norm(0, '用户以存在!');
+						msg = re_act_norm(1, allData.token);
+					} else msg = re_act_norm(0, err);
+					socket.emit('reAct', msg);
 				});
 				break;
 			case 'signIn':
 				var userModel = db.get_model('user');
 				allData.password = encrypt(allData.password);
 				if (isNull(allData.user) || isNull(allData.password)) break;
-				userModel.find(allData).exec((err,query) => {
-					if (!err && !isNull(query)) {
-
-					}
-				})
+				var tempToken = encrypt(allData.user,1);
+				userModel.update(allData, {$set: {token: tempToken}}, function (err, response) {
+					if (!err && response.n === 1) {
+						msg = re_act_norm(1, tempToken);
+					} else msg = re_act_norm(0, err);
+					socket.emit('reAct', msg);
+				});
+				// userModel.find(allData).exec((err,query) => {
+				// 	console.log(query);
+				// 	if (!err && !isNull(query)) {
+				// 		userModel.update({_id: query._id}, {$set: {token: query.token}})
+				// 		msg = re_act_norm(1, query.token);
+				// 	}
+				// 	socket.emit('reAct', msg);
+				// })
 				break;
 		}
-		socket.emit('reAct', msg);
 	});
 
 	// 用户消息
